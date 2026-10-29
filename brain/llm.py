@@ -2,6 +2,7 @@ from ollama import chat
 from memory.chat_memory import save_messages, load_messages
 
 MODEL_NAME = "gpt-oss:20b-cloud"
+MAX_CONTEXT_MESSAGES = 12
 
 SYSTEM_MESSAGE = {
         "role": "system",
@@ -36,9 +37,14 @@ def ask(user_message):
         }
     )
 
+    system_message = messages[0]
+    recent_messages = messages[1:][-MAX_CONTEXT_MESSAGES:]
+
+    context = [system_message] + recent_messages
+
     response = chat(
         model=MODEL_NAME,
-        messages=messages
+        messages=context
     )
 
     assistant_reply = response.message.content
