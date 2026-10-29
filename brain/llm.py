@@ -1,7 +1,7 @@
 from ollama import chat
 from memory.chat_memory import save_messages, load_messages
 
-MODEL_NAME = "qwen3:8b"
+MODEL_NAME = "gpt-oss:20b-cloud"
 
 SYSTEM_MESSAGE = {
         "role": "system",
