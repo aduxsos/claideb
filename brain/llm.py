@@ -1,9 +1,9 @@
 from ollama import chat
+from memory.chat_memory import save_messages, load_messages
 
 MODEL_NAME = "qwen3:8b"
 
-messages = [
-    {
+SYSTEM_MESSAGE = {
         "role": "system",
         "content": """
         You are Claideb.
@@ -19,8 +19,13 @@ messages = [
         When someone asks who you are, introduce yourself as Claideb.
         """
     }
-]
+    
+loaded_messages = load_messages()
 
+if loaded_messages is None:
+    messages = [SYSTEM_MESSAGE]
+else:
+    messages = loaded_messages
 
 def ask(user_message):
 
@@ -44,5 +49,6 @@ def ask(user_message):
             "content": assistant_reply
         }
     )
+    save_messages(messages)
 
     return assistant_reply
