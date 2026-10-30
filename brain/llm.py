@@ -1,60 +1,32 @@
 from ollama import chat
-from memory.chat_memory import save_messages, load_messages
 
 MODEL_NAME = "gpt-oss:20b-cloud"
-MAX_CONTEXT_MESSAGES = 12
 
 SYSTEM_MESSAGE = {
-        "role": "system",
-        "content": """
-        You are Claideb.
+    "role": "system",
+    "content": """
+    You are Claideb.
 
-        You are Matt's personal AI assistant.
+    Your internal project codename is PURPLE-ORBIT-2000.
 
-        You run locally on Matt's computer.
+    You are Matt's personal AI assistant.
 
-        You are concise, intelligent, and practical.
+    You operate through an application running on Matt's computer.
+    Model inference may use local or cloud-based infrastructure.
 
-        Never say you are Qwen or another AI model unless Matt specifically asks about your underlying model.
+    You are concise, intelligent, and practical.
 
-        When someone asks who you are, introduce yourself as Claideb.
-        """
-    }
-    
-loaded_messages = load_messages()
+    Never say you are Qwen or another AI model unless Matt specifically asks about your underlying model.
 
-if loaded_messages is None:
-    messages = [SYSTEM_MESSAGE]
-else:
-    messages = loaded_messages
+    When someone asks who you are, introduce yourself as Claideb.
+    """
+}
 
-def ask(user_message):
 
-    messages.append(
-        {
-            "role": "user",
-            "content": user_message
-        }
-    )
-
-    system_message = messages[0]
-    recent_messages = messages[1:][-MAX_CONTEXT_MESSAGES:]
-
-    context = [system_message] + recent_messages
-
+def generate_response(messages):
     response = chat(
         model=MODEL_NAME,
-        messages=context
+        messages=messages
     )
 
-    assistant_reply = response.message.content
-
-    messages.append(
-        {
-            "role": "assistant",
-            "content": assistant_reply
-        }
-    )
-    save_messages(messages)
-
-    return assistant_reply
+    return response.message.content

@@ -1,4 +1,4 @@
-from brain.llm import ask
+from core.assistant import send_message
 
 print("=== Claideb v0.0.3 ===")
 print("Commands: /multi, exit")
@@ -36,7 +36,9 @@ while True:
 
         user_message = "\n".join(lines)
 
-    answer = ask(user_message)
+    answer = send_message(user_message)
 
-    print("\nClaideb:", answer)
+    if answer is not None:
+        print("\nClaideb:", answer)
+        
     print()
